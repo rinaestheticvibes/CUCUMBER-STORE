@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Cucumber Fortune Game</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(to bottom right, #dfffd6, #c6ffe0);
+      padding: 20px;
+      text-align: center;
+    }
+    h1 {
+      font-size: 2rem;
+      color: #1f501f;
+      margin-bottom: 10px;
+    }
+    .info {
+      font-size: 0.9rem;
+      color: #444;
+      margin-bottom: 20px;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+      gap: 10px;
+      max-width: 700px;
+      margin: auto;
+    }
+    .cucumber {
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+    .cucumber:hover {
+      transform: scale(1.1);
+    }
+    .overlay {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw; height: 100vh;
+      background: rgba(0,0,0,0.5);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 999;
+      display: none;
+    }
+    .popup {
+      background: #fff;
+      padding: 25px;
+      border-radius: 12px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.3);
+      max-width: 320px;
+      width: 90%;
+      text-align: center;
+    }
+    .popup p {
+      font-size: 1rem;
+      margin-bottom: 15px;
+    }
+    .popup button {
+      margin-top: 10px;
+      padding: 10px 16px;
+      font-size: 1rem;
+      border: none;
+      border-radius: 6px;
+      background-color: #4CAF50;
+      color: white;
+      cursor: pointer;
+    }
+    .popup button:hover {
+      background-color: #388e3c;
+    }
+    .spinner {
+      width: 40px;
+      height: 40px;
+      border: 5px solid #eee;
+      border-top: 5px solid #4CAF50;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin: 20px auto;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg);}
+      100% { transform: rotate(360deg);}
+    }
+    .disabled {
+      pointer-events: none;
+      opacity: 0.4;
+    }
+    
+    .cucumber {
+  width: 30px; /* smaller size */
+  height: 30px;
+  object-fit: cover;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+#cucumberGrid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 30px; /* less gap */
+  max-width: 350px;
+  margin: 0 auto;
+}
+
+.cucumber-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 50px;
+}
+
+.cucumber-label {
+  font-size: 10px;
+  color: #333;
+  margin-top: 4px;
+  font-weight: bold;
+}
+
+.info {
+    text-align: center;
+    font-style: italic;
+}
+  </style>
+</head>
+<body>
+
+  <h1>Pick a Cucumber</h1>
+  <div class="info">
+      Fortune or unfortune games a ni e.
+      A hnuai a fanghma te hi hmet la,
+      i vanneih dawn leh dawn loh
+      en ve rawh le.
+      <strong>Nikhatah panga zel</strong> i thlang thei ang.
+      Your destiny awaits!.
+  </div>
+  <div class="grid" id="cucumberGrid"></div>
+
+  <div class="overlay" id="popup">
+    <div class="popup" id="popupContent">
+      <div class="spinner" id="spinner"></div>
+      <p id="popupText">Reading your fortune...</p>
+    </div>
+  </div>
+
+  <script>
+    const grid = document.getElementById('cucumberGrid');
+    const popup = document.getElementById('popup');
+    const popupText = document.getElementById('popupText');
+    const popupContent = document.getElementById('popupContent');
+    const spinner = document.getElementById('spinner');
+
+    for (let i = 1; i <= 100; i++) {
+  const wrapper = document.createElement("div");
+  wrapper.className = "cucumber-wrapper";
+
+  const img = document.createElement("img");
+  img.src = `images/cucumber.png`;
+  img.alt = `Cucumber ${i}`;
+  img.className = "cucumber";
+  img.dataset.index = i;
+
+  const label = document.createElement("div");
+  label.className = "cucumber-label";
+  label.textContent = `Cucumber ${i}`;
+
+  wrapper.appendChild(img);
+  wrapper.appendChild(label);
+  grid.appendChild(wrapper);
+}
+
+    // Message sets
+    const fortune = Array.from({ length: 200 }, (_, i) => `🌟 Fortune #${i+1}: Happiness will come soon!`);
+    const unfortune = Array.from({ length: 200 }, (_, i) => `⚠️ Unfortune #${i+1}: Take caution today.`);
+    const other = Array.from({ length: 300 }, (_, i) => `🎭 Other #${i+1}: Something unexpected awaits.`);
+
+    function getRandomMessage() {
+      const set = [fortune, unfortune, other];
+      const randomSet = set[Math.floor(Math.random() * set.length)];
+      return randomSet[Math.floor(Math.random() * randomSet.length)];
+    }
+
+    // LocalStorage key by date
+    const todayKey = new Date().toISOString().slice(0, 10);
+    let gameData = JSON.parse(localStorage.getItem("cucumberGame") || "{}");
+
+    if (!gameData[todayKey]) {
+      gameData[todayKey] = [];
+    }
+
+    const userResults = gameData[todayKey];
+
+    // Disable after 5
+    if (userResults.length >= 5) grid.classList.add("disabled");
+
+    // Main click logic
+    grid.addEventListener("click", (e) => {
+      if (!e.target.classList.contains("cucumber")) return;
+      if (userResults.length >= 5) return;
+
+      const message = getRandomMessage();
+      popup.style.display = "flex";
+      spinner.style.display = "block";
+      popupText.textContent = "I vannei dawn em aw...😅";
+
+      setTimeout(() => {
+        userResults.push(message);
+        gameData[todayKey] = userResults;
+        localStorage.setItem("cucumberGame", JSON.stringify(gameData));
+
+        spinner.style.display = "none";
+        if (userResults.length === 5) {
+          grid.classList.add("disabled");
+          showFinalPopup();
+        } else {
+          popupContent.innerHTML = `
+            <p>${message}</p>
+            <button onclick="closePopup()">OK</button>
+          `;
+        }
+      }, 3000);
+    });
+
+    function closePopup() {
+      popup.style.display = "none";
+      popupContent.innerHTML = `
+        <div class="spinner" id="spinner"></div>
+        <p id="popupText">Reading your fortune...</p>
+      `;
+    }
+
+    function showFinalPopup() {
+      const all = userResults.map((m, i) => `#${i+1}: ${m}`).join("<br>");
+      popupContent.innerHTML = `
+        <p><strong>Your Results:</strong><br><br>${all}</p>
+        <button onclick="shareResults()">📤 Share</button>
+        <button onclick="closePopup()">Done</button>
+      `;
+    }
+
+    function shareResults() {
+      const text = userResults.map((m, i) => `#${i+1}: ${m}`).join("\n");
+      const finalText = `🥒 My Cucumber Fortune:\n\n${text}`;
+      if (navigator.share) {
+        navigator.share({ text: finalText });
+      } else {
+        navigator.clipboard.writeText(finalText);
+        alert("Copied to clipboard!");
+      }
+    }
+  </script>
+</body>
+</html>

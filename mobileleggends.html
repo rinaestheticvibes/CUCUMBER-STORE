@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>MLBB Recharge</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+      
+      /*BODY CONTENTS*/
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #f0f9ff, #dff4ff);
+      color: #222;
+      padding: 20px;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+      /* HEADER Top Container */
+header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      width: 99%;
+      margin-left: -15px;
+      margin-top: -20px;
+    }
+
+.menu {
+      font-size: 1.5rem;
+      cursor: pointer;
+    }
+
+.store-name {
+      font-weight: 800;
+      font-size: 1.6rem;
+    }
+
+.store-name span {
+      color: red;
+    }
+
+.logo {
+      width: 32px;
+      height: 32px;
+      border: none;
+      border-radius: 16px;
+    }
+    
+      /* Menu Button */
+.menu {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  cursor: pointer;
+  padding: 5px;
+  width: 30px;
+}
+
+.menu .bar {
+  height: 3px;
+  background-color: #333;
+  border-radius: 2px;
+  transition: 0.3s;
+}
+
+.menu.open .bar:nth-child(1) {
+  transform: rotate(45deg) translate(5px, 5px);
+}
+.menu.open .bar:nth-child(2) {
+  opacity: 0;
+}
+.menu.open .bar:nth-child(3) {
+  transform: rotate(-45deg) translate(6px, -6px);
+}
+
+/* Sidebar */
+.overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.3);
+  z-index: 10;
+  justify-content: flex-start;
+}
+.sidebar {
+  background-color: #fff;
+  width: 250px;
+  height: 100vh;
+  padding: 2rem 1rem;
+  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+}
+.sidebar a {
+  text-decoration: none;
+  color: #333;
+  font-weight: 500;
+  padding: 0.75rem 1rem;
+  margin-bottom: 0.5rem;
+  border-radius: 10px;
+  background-color: #f3f4f6;
+  transition: all 0.2s ease;
+  text-align: center;
+}
+.sidebar a:hover {
+  background-color: #d946ef;
+  color: white;
+  transform: translateX(5px);
+}
+
+/* Developer Popup */
+.popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: none;
+  background: rgba(0,0,0,0.5);
+  justify-content: center;
+  align-items: center;
+  z-index: 10000;
+}
+
+.popup {
+  background: white;
+  padding: 20px;
+  width: 90%;
+  max-width: 400px;
+  max-height: 80vh;
+  overflow-y: auto;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.2);
+}
+
+.popup input[type="text"],
+.popup input[type="password"] {
+  width: 93%;
+  padding: 10px;
+  margin: 6px 0;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+.popup button {
+  width: 100%;
+  padding: 10px;
+  background: linear-gradient(to right, #00cc99, #00aaff);
+  color: white;
+  font-weight: bold;
+  border: none;
+  border-radius: 6px;
+  margin-top: 8px;
+  cursor: pointer;
+}
+
+.popup button:hover {
+  background: linear-gradient(to right, #00aaff, #0077aa);
+}
+
+    /* Three Lines Animate when open */
+.menu.open .bar:nth-child(1) {
+  transform: rotate(45deg) translate(5px, 5px);
+}
+
+.menu.open .bar:nth-child(2) {
+  opacity: 0;
+}
+
+.menu.open .bar:nth-child(3) {
+  transform: rotate(-45deg) translate(6px, -6px);
+}
+
+      /* IMAGE DISPLAY */
+      .banner {
+      width: 100%;
+      border-radius: 12px;
+      margin-bottom: 15px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+      animation: fadeIn 1s ease-in;
+      padding-top: 0;
+      margin-top: 10px;
+    }
+    
+    /* Mlbb Diamond Recharge */
+    h1 {
+      text-align: center;
+      margin: 10px 0 20px;
+      font-size: 1.6em;
+      color: #005577;
+    }
+    
+    /* ID & Server Input Zone*/
+    label {
+      display: block;
+      margin-top: 10px;
+      margin-bottom: 5px;
+      font-weight: 600;
+      color: #444;
+    }
+
+    input {
+      width: 92%;
+      padding: 12px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      background: #fff;
+      font-size: 16px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+    }
+    
+    /* DIAMOND SELECTION SECTION */
+    .section {
+      margin: 25px 0;
+    }
+
+    /* Diamond section with soft card style */
+    .diamond-section {
+      background: #ffffffcc;
+      backdrop-filter: blur(6px);
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 8px 20px rgba(0, 170, 255, 0.1);
+    }
+
+    .diamond-section h2 {
+      text-align: center;
+      margin-bottom: 15px;
+      color: #0077aa;
+    }
+
+    .diamond-options {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+      justify-content: space-between;
+    }
+
+    .diamond-option {
+      background: white;
+      color: #222;
+      padding: 15px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      cursor: pointer;
+      text-align: center;
+      flex: 1 1 calc(50% - 10px);
+      transition: transform 0.2s ease, box-shadow 0.3s ease;
+      font-weight: bold;
+    }
+
+    .diamond-option:hover {
+      transform: scale(1.03);
+      box-shadow: 0 6px 14px rgba(0, 128, 255, 0.2);
+    }
+
+    .diamond-option.selected {
+      border: 2px solid #00aaff;
+      box-shadow: 0 0 12px #00aaff;
+    }
+    
+    /* Select Payment Method Option*/
+    h3 {
+        text-align: center;
+        color: #0077aa;
+        margin-top: 25px;
+        margin-bottom: 15px;
+    }
+    
+    /* Payment section */
+    .payment-options {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+      margin-top: 10px;
+    }
+
+    .payment-option {
+      background: white;
+      color: #222;
+      padding: 15px;
+      border-radius: 10px;
+      cursor: pointer;
+      text-align: center;
+      flex: 1 1 calc(50% - 10px);
+      box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+      transition: transform 0.2s ease, box-shadow 0.3s ease;
+      font-weight: bold;
+    }
+
+.payment-option {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  justify-content: center;
+}
+
+.payment-option img.icon {
+  width: 28px;
+  height: 28px;
+  object-fit: contain;
+}
+
+    .payment-option:hover {
+      transform: scale(1.03);
+    }
+
+    .payment-option.selected {
+      border: 2px solid #00cc99;
+      box-shadow: 0 0 12px #00cc99;
+    }
+    
+    /* Qr Code Section */
+.small-qr-btn {
+  padding: 12px 12px;
+  font-size: 14px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  margin-top: 30px;
+}
+
+.qr-box {
+  margin-top: 10px;
+  text-align: center;
+}
+
+.qr-img {
+  width: 160px;
+  height: 160px;
+  border-radius: 12px;
+  border: 2px solid #ccc;
+}
+
+.scan-text {
+  margin-top: 8px;
+  font-size: 14px;
+  color: #333;
+  font-weight: 500;
+}
+
+     /* Review Recharge Information */
+    .summary {
+      background: #ffffffcc;
+      padding: 15px;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+      margin-top: 20px;
+    }
+
+    .summary p {
+      margin: 6px 0;
+      font-size: 16px;
+    }
+    
+    /* Place Order Button */
+    button {
+      width: 100%;
+      padding: 16px;
+      background: linear-gradient(to right, #00cc99, #00aaff);
+      border: none;
+      border-radius: 10px;
+      font-size: 18px;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+      margin-top: 20px;
+      transition: background 0.3s ease;
+    }
+
+    button:hover {
+      background: linear-gradient(to right, #00aaff, #0077aa);
+    }
+    
+.whatsapp-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 16px;
+  width: 90%;
+  background: linear-gradient(to right, #25D366, #128C7E);
+  color: white;
+  font-size: 18px;
+  font-weight: bold;
+  border-radius: 10px;
+  text-decoration: none;
+  margin-top: 20px;
+  transition: background 0.3s ease;
+}
+
+.whatsapp-button:hover {
+  background: linear-gradient(to right, #128C7E, #075E54);
+}
+
+.whatsapp-button img.icon {
+  width: 24px;
+  height: 24px;
+}
+
+
+  </style>
+</head>
+<body>
+    
+  <!-- Header -->
+  <header>
+    <div class="menu" onclick="toggleSidebar()">
+  <div class="bar"></div>
+  <div class="bar"></div>
+  <div class="bar"></div>
+</div>
+    <div class="store-name">CUCUMBER <span>STORE</span></div>
+    <img src="Images/storelogo.png" alt="logo" class="logo" />
+  </header>
+
+  <!-- Sidebar Overlay -->
+  <div id="overlay" class="overlay" onclick="closeSidebar()">
+    <div class="sidebar" id="sidebar">
+  <a href="index.html" onclick="closeSidebar()">🏠 Home</a>
+  <a href="#" onclick="closeSidebar()">📄  Dashboard</a>
+  <a href="accountinml.html" onclick="closeSidebar()">🔐 Account</a>
+  <a href="#" onclick="closeSidebar()">🔒 Sign up</a>
+  <a href="#" onclick="closeSidebar()">🔓 Login</a>
+  <a href="#" onclick="closeSidebar()">👤 Contact us</a>
+  <a href="#" onclick="closeSidebar()">📝 Whatsapp Channel</a>
+  <a href="#" onclick="closeSidebar()">📔 About</a>
+  <a href="#" onclick="openAdminPanel()">🛠️ Developer</a>
+</div>
+</div>
+  </div>
+  
+   <!-- Developer Panel -->
+  <div id="adminPanelOverlay" class="popup-overlay" onclick="closeAdminPanel(event)">
+    <div class="popup" onclick="event.stopPropagation()">
+      <h2>Developer Panel</h2>
+      <input type="password" id="adminPass" placeholder="Enter password" />
+      <button onclick="checkDev()">Unlock</button>
+
+      <div id="priceControl" style="display:none;">
+        <h3>Update Diamond Pack</h3>
+        <input type="text" id="diamondInput" placeholder="Diamond Amount" />
+        <input type="text" id="priceInput" placeholder="New Price" />
+        <label><input type="checkbox" id="outOfStockCheckbox" /> Out of Stock</label>
+        <button onclick="updateDiamond()">Save</button>
+
+        <hr />
+        <h3>Add New Diamond Pack</h3>
+        <input type="text" id="newDiamonds" placeholder="Diamond Amount" />
+        <input type="text" id="newPrice" placeholder="Price" />
+        <label><input type="checkbox" id="newOutOfStock" /> Out of Stock</label>
+        <button onclick="addNewPack()">Add Pack</button>
+        <hr />
+<h3>Delete Diamond Pack</h3>
+<input type="text" id="deleteDiamonds" placeholder="Diamond Amount to Delete" />
+<button onclick="deleteDiamondPack()">Delete Pack</button>
+      </div>
+    </div>
+  </div>
+
+  <img src="Images/angella-aspirant.jpg" class="banner" alt="MLBB Banner" />
+  <h1>MLBB Diamond Recharge</h1>
+
+  <!-- ID/Server Input -->
+<div class="section">
+  <label for="playerId">Player ID</label>
+  <input id="playerId" type="text" placeholder="Enter Player ID" />
+
+  <label for="serverId">Server ID</label>
+  <input id="serverId" type="text" placeholder="Enter Server ID" />
+</div>
+
+
+
+  <!-- Diamond Section -->
+  <div class="diamond-section">
+    <h2>Select Diamonds</h2>
+    <div id="diamondOptions" class="diamond-options">
+      <div class="diamond-option" data-diamonds="5" data-price="15">💎 5 Diamonds = ₹15</div>
+      <div class="diamond-option" data-diamonds="11" data-price="25">💎 11 Diamonds = ₹25</div>
+      <div class="diamond-option" data-diamonds="22" data-price="35">💎 22 Diamonds = ₹35</div>
+      <div class="diamond-option" data-diamonds="55" data-price="75">💎 55 Diamonds = ₹75</div>
+      <div class="diamond-option" data-diamonds="86" data-price="108">💎 86 Diamonds = ₹108</div>
+      <div class="diamond-option" data-diamonds="110" data-price="140">💎 110 Diamonds = ₹140</div>
+      <div class="diamond-option" data-diamonds="112" data-price="160">💎 112 Diamonds = ₹160</div>
+      <div class="diamond-option" data-diamonds="141" data-price="180">💎 141 Diamonds = ₹180</div>
+      <div class="diamond-option" data-diamonds="165" data-price="205">💎 165 Diamonds = ₹205</div>
+      <div class="diamond-option" data-diamonds="172" data-price="215">💎 172 Diamonds = ₹215</div>
+      <div class="diamond-option" data-diamonds="220" data-price="275">💎 220 Diamonds = ₹275</div>
+      <div class="diamond-option" data-diamonds="257" data-price="315">💎 257 Diamonds = ₹315</div>
+      <div class="diamond-option" data-diamonds="275" data-price="330">💎 275 Diamonds = ₹330</div>
+      <div class="diamond-option" data-diamonds="312" data-price="385">💎 312 Diamonds = ₹385</div>
+      <div class="diamond-option" data-diamonds="343" data-price="420">💎 343 Diamonds = ₹420</div>
+      <div class="diamond-option" data-diamonds="429" data-price="525">💎 429 Diamonds = ₹525</div>
+      <div class="diamond-option" data-diamonds="514" data-price="620">💎 514 Diamonds = ₹620</div>
+      <div class="diamond-option" data-diamonds="565" data-price="670">💎 565 Diamonds = ₹670</div>
+      <div class="diamond-option" data-diamonds="600" data-price="730">💎 600 Diamonds = ₹730</div>
+      <div class="diamond-option" data-diamonds="706" data-price="840">💎 706 Diamonds = ₹840</div>
+      <div class="diamond-option" data-diamonds="963" data-price="1150">💎 963 Diamonds = ₹1150</div>
+      <div class="diamond-option" data-diamonds="1049" data-price="1260">💎 1049 Diamonds = ₹1260</div>
+      <div class="diamond-option" data-diamonds="1130" data-price="1345">💎 1130 Diamonds = ₹1345</div>
+      <div class="diamond-option" data-diamonds="1412" data-price="1675">💎 1412 Diamonds = ₹1675</div>
+      <div class="diamond-option" data-diamonds="2195" data-price="2540">💎 2195 Diamonds = ₹2540</div>
+      <div class="diamond-option" data-diamonds="3688" data-price="4225">💎 3688 Diamonds = ₹4225</div>
+      <div class="diamond-option" data-diamonds="5532" data-price="6090">💎 5532 Diamonds = ₹6090</div>
+      <div class="diamond-option" data-diamonds="Weekly Pass" data-price="130">Weekly Pass = ₹130
+</div>
+<div class="diamond-option" data-diamonds="Twilight Pass" data-price="700">Twilight Pass = ₹700
+</div>
+<div class="diamond-option" data-diamonds="Starlight" data-price="300">Starlight = ₹300
+</div>
+  </div>
+
+  <!-- Payment Section -->
+  <h3>Select Payment Methods</h3>
+  <div id="paymentOptions" class="payment-options">
+  <div class="payment-option" data-method="Google Pay">
+    <img src="Images/googlepay.png" alt="Google Pay" class="icon" />
+    Google Pay
+  </div>
+  <div class="payment-option" data-method="Paytm">
+    <img src="Images/paytm.png" alt="Paytm" class="icon" />
+    Paytm
+  </div>
+  <div class="payment-option" data-method="PhonePe">
+    <img src="Images/phonepe.png" alt="PhonePe" class="icon" />
+    PhonePe
+  </div>
+  <div class="payment-option" data-method="BHIM">
+    <img src="Images/bhim.png" alt="BHIM" class="icon" />
+    BHIM
+  </div>
+</div>
+
+<button onclick="showQRCode()" class="small-qr-btn">Show QR Code</button>
+<div id="qrCodeBox" style="display: none;" class="qr-box">
+  <img src="Images/qr.jpg" alt="My QR Code" class="qr-img" />
+  <p class="scan-text">Scan to Pay</p>
+</div>
+
+  <!-- Summary -->
+  <div class="summary">
+    <h3>Order Information</h3>
+    <p id="summaryId">ID: </p>
+    <p id="summaryServer">Server: </p>
+    <p id="summaryDiamonds">Diamonds: </p>
+    <p id="summaryPayment">Payment: </p>
+    <p id="summaryPrice">Total: </p>
+  </div>
+
+  <a href="https://wa.me/918787550589" onclick="placeOrder()" class="whatsapp-button">
+  <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" class="icon" />
+  Place Order
+</a>
+
+  <script src="mobilelegends.js"></script>
+</body>
+</html>

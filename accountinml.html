@@ -1,0 +1,87 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Your Account</title>
+  <style>
+    body {
+      font-family: Arial;
+      padding: 20px;
+      background: #f0f4f8;
+    }
+    .account-box {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      max-width: 400px;
+      margin: auto;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    h2 {
+      text-align: center;
+      color: #0077cc;
+    }
+    label, input {
+      display: block;
+      width: 100%;
+      margin-top: 10px;
+    }
+    input {
+      padding: 10px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      width: 92%;
+    }
+    button {
+      margin-top: 15px;
+      padding: 12px;
+      width: 100%;
+      background: #007bff;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-size: 16px;
+    }
+    .logout-btn {
+      background: #dc3545;
+    }
+  </style>
+</head>
+<body>
+  <div class="account-box">
+    <h2>Save Your ID and Zone ID</h2>
+    <label for="playerId">Player ID</label>
+    <input type="text" id="playerId" placeholder="Enter Player ID" />
+
+    <label for="serverId">Zone ID</label>
+    <input type="text" id="serverId" placeholder="Enter Server ID" />
+
+    <button onclick="saveAccount()">Save</button>
+  </div>
+
+  <script>
+    window.onload = function () {
+      document.getElementById('playerId').value = localStorage.getItem('playerId') || '';
+      document.getElementById('serverId').value = localStorage.getItem('serverId') || '';
+    };
+
+    function saveAccount() {
+      const playerId = document.getElementById('playerId').value;
+      const serverId = document.getElementById('serverId').value;
+      
+      if (!playerId || !serverId) {
+    alert("Please Enter both player ID and Zone ID");
+    return;
+  }
+  
+      localStorage.setItem('playerId', playerId);
+      localStorage.setItem('serverId', serverId);
+
+      alert('✅ Account info saved!');
+    }
+    
+  </script>
+</body>
+</html>
